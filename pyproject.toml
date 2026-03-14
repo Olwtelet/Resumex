@@ -1,0 +1,35 @@
+[project]
+name = "shortform-sludge-maker"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Matt Main_PC",email = "matmigg0804@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "pillow (>=11.3.0,<12.0.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "selenium (>=4.34.2,<5.0.0)",
+    "webdriver-manager (>=4.0.2,<5.0.0)",
+    "huggingface_hub",
+    "loguru",
+    "misaki[en]>=0.9.4",
+    "numpy",
+    "torch>=2.0.0",
+    "transformers>=4.36.0",
+    "soundfile (>=0.13.1,<0.14.0)",
+    "moviepy (==1.0.3)",
+    "opencv-python (>=4.12.0.88,<5.0.0.0)",
+    "faster-whisper (>=1.1.1,<2.0.0)",
+    "google-auth (>=2.15,<2.42)",
+    "google-api-python-client (>=2.187.0,<3.0.0)",
+    "google-auth-oauthlib (==1.2.3)",
+    "undetected-chromedriver (>=3.5.0)",
+    "yt-dlp (>=2025.12.8,<2026.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
