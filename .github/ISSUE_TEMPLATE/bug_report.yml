@@ -1,0 +1,68 @@
+name: Bug report
+description: Something does not work the way it says it does
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Most bugs are diagnosed from `resumex doctor` and the failing command
+        run with `-v`. Including both usually saves a round trip.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+      placeholder: |
+        I ran `resumex render story.md` and the captions were half a second late.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: The exact commands. If the input matters, attach or paste the story file.
+      placeholder: |
+        1. resumex init
+        2. resumex render stories/sample.md
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `resumex doctor`
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: verbose
+    attributes:
+      label: Output of the failing command with `-v`
+      description: Paste the traceback if there is one. Check first that it contains no personal paths you would rather not share.
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Resumex version
+      description: Output of `resumex --version`
+      placeholder: resumex 0.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - macOS
+        - Windows
+    validations:
+      required: true

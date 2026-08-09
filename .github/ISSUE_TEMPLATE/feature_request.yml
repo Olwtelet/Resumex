@@ -1,0 +1,48 @@
+name: Feature request
+description: Suggest something Resumex should be able to do
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Resumex stays deliberately small. The features most likely to land are
+        the ones that keep it working offline, with no account and no telemetry.
+        CONTRIBUTING.md lists what will be turned down.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do
+      description: The task, not the solution. What are you doing today instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like Resumex to do
+      description: If it is a new command or flag, write out what you would type.
+      placeholder: |
+        resumex render story.md --format square
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dependencies
+    attributes:
+      label: Would this need anything new installed?
+      options:
+        - "No: it works with FFmpeg alone"
+        - "Yes: a new optional extra"
+        - "Yes: a new required dependency"
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Anything else
+      description: Alternatives you considered, or prior art in other tools.
+    validations:
+      required: false
