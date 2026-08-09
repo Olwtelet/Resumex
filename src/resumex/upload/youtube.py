@@ -100,11 +100,19 @@ class YouTubeUploader:
         return token
 
     def _credentials(self):
+        token = self.token_path
+        # "You have not set this up" is more useful than "a library is missing".
+        if self.settings.client_secrets is None and not token.is_file():
+            raise NotConfiguredError(
+                "YouTube is not configured.\n"
+                "Rendering still works normally - this only affects publishing.",
+                hint=SETUP_HINT,
+            )
+
         _require_libraries()
         from google.auth.transport.requests import Request
         from google.oauth2.credentials import Credentials
 
-        token = self.token_path
         if not token.is_file():
             raise NotConfiguredError(
                 "YouTube is not authorised yet.\n"
@@ -125,7 +133,8 @@ class YouTubeUploader:
             try:
                 credentials.refresh(Request())
                 token.write_text(credentials.to_json(), encoding="utf-8")
-            except Exception as exc:  # noqa: BLE001 — google surfaces many refresh errors
+            # google-auth surfaces many unrelated failures here.
+            except Exception as exc:
                 raise UploadError(
                     f"The YouTube token has expired and could not be refreshed: {exc}",
                     hint="Run `resumex youtube-auth` to sign in again.",

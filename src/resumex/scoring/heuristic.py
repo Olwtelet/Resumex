@@ -59,7 +59,7 @@ def _structure_score(story: Story) -> float:
         return 0.0
 
     average_words = sum(len(s.split()) for s in sentences) / len(sentences)
-    # 8–22 words per sentence reads naturally out loud.
+    # 8 to 22 words per sentence reads naturally out loud.
     if 8 <= average_words <= 22:
         sentence_score = 10.0
     elif average_words < 8:

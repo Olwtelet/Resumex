@@ -17,16 +17,21 @@ MAX_TAGS = 6
 
 _WORD = re.compile(r"[A-Za-z][A-Za-z'-]{2,}")
 
-STOPWORDS = frozenset(
-    """
-    a about after all also am an and any are as at be because been before being but by can could
-    did do does doing done down each even every for from further had has have having he her here
-    hers him his how i if in into is it its just me more most my no nor not now of off on once only
-    or other our out over own same she should so some such than that the their them then there
-    these they this those through to too under until up very was we were what when where which
-    while who whom why will with would you your yours
-    """.split()
-)
+# Punctuation that reads as decoration at the edge of a title.
+DECORATIVE = " -\u2013\u2014:;,."
+
+STOPWORDS = frozenset({
+    "a", "about", "after", "all", "also", "am", "an", "and", "any", "are", "as", "at", "be",
+    "because", "been", "before", "being", "but", "by", "can", "could", "did", "do", "does",
+    "doing", "done", "down", "each", "even", "every", "for", "from", "further", "had", "has",
+    "have", "having", "he", "her", "here", "hers", "him", "his", "how", "i", "if", "in", "into",
+    "is", "it", "its", "just", "me", "more", "most", "my", "no", "nor", "not", "now", "of",
+    "off", "on", "once", "only", "or", "other", "our", "out", "over", "own", "same", "she",
+    "should", "so", "some", "such", "than", "that", "the", "their", "them", "then", "there",
+    "these", "they", "this", "those", "through", "to", "too", "under", "until", "up", "very",
+    "was", "we", "were", "what", "when", "where", "which", "while", "who", "whom", "why",
+    "will", "with", "would", "you", "your", "yours"
+})
 
 
 def generate(story: Story, max_title_length: int = MAX_TITLE) -> VideoMetadata:
@@ -42,10 +47,10 @@ def generate(story: Story, max_title_length: int = MAX_TITLE) -> VideoMetadata:
 
 def build_title(raw: str, limit: int = MAX_TITLE) -> str:
     """Collapse whitespace and truncate on a word boundary."""
-    title = re.sub(r"\s+", " ", raw).strip(" -–—:;,.")
+    title = re.sub(r"\s+", " ", raw).strip(DECORATIVE)
     if len(title) <= limit:
         return title
-    clipped = title[: limit - 1].rsplit(" ", 1)[0].rstrip(" -–—:;,.")
+    clipped = title[: limit - 1].rsplit(" ", 1)[0].rstrip(DECORATIVE)
     return f"{clipped or title[: limit - 1]}…"
 
 

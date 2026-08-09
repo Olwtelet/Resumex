@@ -86,7 +86,8 @@ class KokoroNarrator(Narrator):
                     NarrationChunk(text=str(graphemes).strip(), start=cursor, end=cursor + seconds)
                 )
                 cursor += seconds
-        except Exception as exc:  # noqa: BLE001 — third-party failures vary too much to enumerate
+        # Third-party model failures vary too much to enumerate.
+        except Exception as exc:
             raise NarrationError(
                 f"Kokoro failed to synthesize speech: {exc}",
                 hint=(

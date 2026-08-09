@@ -10,7 +10,7 @@ from resumex.sources.base import Source
 from resumex.sources.local import LocalSource, load_file
 from resumex.sources.reddit import RedditSource
 
-__all__ = ["LocalSource", "RedditSource", "Source", "load_file", "get_source"]
+__all__ = ["LocalSource", "RedditSource", "Source", "get_source", "load_file"]
 
 
 def get_source(name: str, config: Config, path: Path | None = None) -> Source:

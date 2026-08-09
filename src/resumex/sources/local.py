@@ -32,12 +32,17 @@ class LocalSource(Source):
     def stories(self) -> Iterator[Story]:
         if self.path.is_dir():
             files = sorted(
-                p for p in self.path.rglob("*") if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES
+                p
+                for p in self.path.rglob("*")
+                if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES
             )
             if not files:
                 raise ContentError(
                     f"No story files found in {self.path}",
-                    hint=f"Add a .txt, .md or .json file. Supported: {', '.join(SUPPORTED_SUFFIXES)}",
+                    hint=(
+                        "Add a .txt, .md or .json file. "
+                        f"Supported: {', '.join(SUPPORTED_SUFFIXES)}"
+                    ),
                 )
             for file in files:
                 yield from load_file(file)

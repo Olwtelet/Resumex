@@ -181,7 +181,11 @@ def _youtube(config: Config) -> list[Check]:
     token = config.youtube.token or default_token_path(config)
     if not Path(token).is_file():
         return [Check("warn", "YouTube upload", "not authorised yet - run resumex youtube-auth")]
-    return [Check("ok", "YouTube upload", f"authorised | default visibility {config.youtube.privacy}")]
+    return [
+        Check(
+            "ok", "YouTube upload", f"authorised | default visibility {config.youtube.privacy}"
+        )
+    ]
 
 
 def _writable(directory: Path) -> bool:

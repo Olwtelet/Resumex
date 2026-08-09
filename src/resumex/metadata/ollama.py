@@ -44,7 +44,9 @@ def generate(story: Story, config: OllamaConfig, max_title_length: int) -> Video
     default = fallback.generate(story, max_title_length)
 
     try:
-        title = _clean(client.generate(TITLE_PROMPT.format(title=story.title, body=story.body[:4000])))
+        title = _clean(
+            client.generate(TITLE_PROMPT.format(title=story.title, body=story.body[:4000]))
+        )
         description = _clean(
             client.generate(DESCRIPTION_PROMPT.format(title=story.title, body=story.body[:4000]))
         )

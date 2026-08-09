@@ -25,7 +25,8 @@ class Narrator(ABC):
     def synthesize(self, text: str, destination: Path) -> NarrationResult:
         """Write audio to ``destination`` and describe its timing."""
 
-    def close(self) -> None:
+    # Not abstract: most narrators hold nothing that needs releasing.
+    def close(self) -> None:  # noqa: B027
         """Release any model held open. Safe to call more than once."""
 
 

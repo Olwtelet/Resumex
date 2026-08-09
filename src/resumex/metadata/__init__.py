@@ -6,7 +6,7 @@ from resumex.config import Config
 from resumex.metadata import fallback, ollama
 from resumex.models import Story, VideoMetadata
 
-__all__ = ["fallback", "ollama", "generate_metadata"]
+__all__ = ["fallback", "generate_metadata", "ollama"]
 
 
 def generate_metadata(story: Story, config: Config) -> VideoMetadata:

@@ -14,7 +14,7 @@ MIN_WORD_SECONDS = 0.08
 
 
 def word_timings(text: str, start: float, end: float) -> list[tuple[str, float, float]]:
-    """Spread ``start``–``end`` across the words of ``text`` by character count."""
+    """Spread the span ``start``..``end`` across the words of ``text`` by length."""
     words = text.split()
     if not words:
         return []

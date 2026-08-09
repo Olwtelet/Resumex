@@ -54,7 +54,7 @@ class SilentNarrator(Narrator):
 def _write_silence(destination: Path, duration: float) -> None:
     """Write a mono 16-bit WAV of the given length."""
     destination.parent.mkdir(parents=True, exist_ok=True)
-    frames = max(1, int(round(duration * SAMPLE_RATE)))
+    frames = max(1, round(duration * SAMPLE_RATE))
     with wave.open(str(destination), "wb") as handle:
         handle.setnchannels(1)
         handle.setsampwidth(SAMPLE_WIDTH)

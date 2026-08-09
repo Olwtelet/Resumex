@@ -75,7 +75,9 @@ def build_parser() -> argparse.ArgumentParser:
     demo = sub.add_parser("demo", help="render a short sample video with no setup")
     demo.add_argument("-o", "--output", type=Path, help="where to write the demo MP4")
     demo.add_argument(
-        "--tts", action="store_true", help="use real speech (needs the tts extra; downloads a model)"
+        "--tts",
+        action="store_true",
+        help="use real speech (needs the tts extra; downloads a model)",
     )
     demo.set_defaults(handler=cmd_demo)
 
@@ -91,7 +93,12 @@ def build_parser() -> argparse.ArgumentParser:
     batch.add_argument(
         "path", type=Path, nargs="?", help="directory of story files (default: <workspace>/stories)"
     )
-    batch.add_argument("--source", default="local", choices=("local", "reddit"), help="where stories come from")
+    batch.add_argument(
+        "--source",
+        default="local",
+        choices=("local", "reddit"),
+        help="where stories come from",
+    )
     batch.add_argument("-n", "--limit", type=int, help="stop after this many videos")
     batch.add_argument("--redo", action="store_true", help="re-render stories already rendered")
     batch.set_defaults(handler=cmd_batch)
@@ -229,7 +236,9 @@ def cmd_batch(args: argparse.Namespace, config: Config) -> int:
     for story, exc in failures:
         console.warn(f"{story.title[:50]}: {exc}")
     if not results and not failures:
-        console.detail("Nothing to do - every story here has already been rendered (--redo forces it).")
+        console.detail(
+            "Nothing to do - every story here has already been rendered (--redo forces it)."
+        )
     return 0 if results or not failures else 1
 
 

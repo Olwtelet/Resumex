@@ -168,7 +168,8 @@ class Pipeline:
                 continue
             try:
                 results.append(self.render_story(story))
-            except Exception as exc:  # noqa: BLE001 — one bad story must not end the batch
+            # One unusable story must never abort a batch.
+            except Exception as exc:
                 logger.warning("failed to render '%s': %s", story.title[:60], exc)
                 if on_error is not None:
                     on_error(story, exc)
@@ -263,7 +264,10 @@ def read_metadata(video: Path) -> dict:
     if not path.is_file():
         raise ContentError(
             f"No metadata sidecar next to {video.name}.",
-            hint=f"Expected {path.name}. Re-render the story, or upload with --title/--description.",
+            hint=(
+                f"Expected {path.name}. Re-render the story, "
+                "or upload with --title/--description."
+            ),
         )
     try:
         return json.loads(path.read_text(encoding="utf-8"))

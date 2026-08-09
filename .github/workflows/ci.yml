@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check .
+      - name: Byte-compile
+        run: python -m compileall -q src tests
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.11", "3.13"]
+        exclude:
+          # One Python per non-Linux runner is enough to catch platform issues.
+          - os: windows-latest
+            python-version: "3.11"
+          - os: macos-latest
+            python-version: "3.11"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # FFmpeg is Resumex's only hard runtime dependency. Installing it here
+      # lets the integration test render and probe a real MP4; without it those
+      # tests skip themselves and the rest of the suite still runs.
+      - name: Install FFmpeg (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install FFmpeg (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ffmpeg
+
+      - name: Install FFmpeg (Windows)
+        if: runner.os == 'Windows'
+        run: choco install ffmpeg --no-progress -y
+
+      - run: pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+
+      - name: Test
+        run: pytest -v
+
+      - name: End-to-end demo
+        run: |
+          resumex --help
+          python -m resumex --version
+          resumex -w ci-workspace doctor
+          resumex -w ci-workspace demo
+          python -m resumex -w ci-workspace stats
+
+      - name: Check the demo really is a 9:16 H.264 video
+        shell: bash
+        run: |
+          set -euo pipefail
+          out=ci-workspace/demo_output/resumex-demo.mp4
+          test -s "$out"
+          read -r w h codec dur < <(ffprobe -v error \
+            -select_streams v:0 \
+            -show_entries stream=width,height,codec_name:format=duration \
+            -of csv=p=0:s=, "$out" | tr ',\n' '  ')
+          echo "geometry=${w}x${h} codec=${codec} duration=${dur}"
+          test "$w" = "1080" && test "$h" = "1920"
+          test "$codec" = "h264"
+          awk -v d="$dur" 'BEGIN { exit !(d > 1) }'
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --upgrade pip build twine
+      - name: Build the wheel and sdist
+        run: python -m build
+      - name: Check the distribution metadata
+        run: twine check dist/*
+      - name: Install the built wheel into a clean environment
+        run: |
+          python -m venv /tmp/clean
+          /tmp/clean/bin/pip install dist/*.whl
+          /tmp/clean/bin/resumex --version
+          /tmp/clean/bin/resumex --help

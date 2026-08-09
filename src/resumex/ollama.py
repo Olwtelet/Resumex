@@ -67,7 +67,10 @@ class OllamaClient:
             detail = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
             raise OllamaUnavailable(
                 f"Ollama returned HTTP {exc.code} for {path}: {detail.strip()[:200]}",
-                hint=f"Check that the model {self.config.model!r} is pulled: ollama pull {self.config.model}",
+                hint=(
+                    f"Check that the model {self.config.model!r} is pulled: "
+                    f"ollama pull {self.config.model}"
+                ),
             ) from exc
         except urllib.error.URLError as exc:
             raise OllamaUnavailable(

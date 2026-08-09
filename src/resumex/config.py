@@ -89,7 +89,9 @@ class RenderConfig:
 
     def __post_init__(self) -> None:
         if self.width % 2 or self.height % 2:
-            raise ConfigError("render.width and render.height must both be even (H.264 requires it)")
+            raise ConfigError(
+                "render.width and render.height must both be even (H.264 requires it)"
+            )
         if self.width <= 0 or self.height <= 0:
             raise ConfigError("render.width and render.height must be positive")
         if not 1 <= self.fps <= 120:

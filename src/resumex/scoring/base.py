@@ -16,7 +16,7 @@ class Scorer(ABC):
 
     @abstractmethod
     def score(self, story: Story) -> StoryScore:
-        """Return a 0–10 score. Must not raise for ordinary input."""
+        """Return a 0 to 10 score. Must not raise for ordinary input."""
 
 
 def clamp(value: float, low: float = 0.0, high: float = 10.0) -> float:

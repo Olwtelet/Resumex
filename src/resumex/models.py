@@ -57,7 +57,7 @@ class Story:
 
 @dataclass(frozen=True, slots=True)
 class StoryScore:
-    """How well a story suits short-form narration, on a 0–10 scale."""
+    """How well a story suits short-form narration, on a 0 to 10 scale."""
 
     overall: float
     components: dict[str, float] = field(default_factory=dict)

@@ -85,7 +85,9 @@ def run(command: list[str], *, description: str, timeout: float | None = None) -
             command, capture_output=True, text=True, timeout=timeout, check=False
         )
     except FileNotFoundError as exc:
-        raise MissingDependencyError(f"{command[0]} could not be executed.", hint=INSTALL_HINT) from exc
+        raise MissingDependencyError(
+            f"{command[0]} could not be executed.", hint=INSTALL_HINT
+        ) from exc
     except subprocess.TimeoutExpired as exc:
         raise RenderError(f"{description} timed out after {timeout:.0f}s.") from exc
 
