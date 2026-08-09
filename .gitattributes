@@ -1,0 +1,13 @@
+# Normalise text in the repository, let each checkout use its native endings.
+* text=auto
+
+# Never touch these.
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.mp4 binary
+*.wav binary
+
+# Keep shell-executed files LF so they run on Linux runners.
+*.sh text eol=lf

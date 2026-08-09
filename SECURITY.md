@@ -6,10 +6,14 @@ Resumex is at `0.1.x`. Fixes land on `main` and go out in the next release.
 
 ## Reporting a vulnerability
 
-Please report privately rather than in a public issue: open a
-[security advisory](https://github.com/Olwtelet/Resumex/security/advisories/new)
-on this repository. Include what you did, what happened, and what you expected.
-Expect a first reply within a week.
+Please report privately rather than in a public issue. Use the repository's
+[Security tab](https://github.com/Olwtelet/Resumex/security/advisories) and
+choose "Report a vulnerability". If private reporting is unavailable to you,
+open a normal issue saying only that you have a security report and asking for
+a private channel — do not include the details there.
+
+Include what you did, what happened, and what you expected. Expect a first
+reply within a week.
 
 Please do not test against anyone else's accounts or infrastructure.
 

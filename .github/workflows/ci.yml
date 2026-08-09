@@ -82,14 +82,22 @@ jobs:
           set -euo pipefail
           out=ci-workspace/demo_output/resumex-demo.mp4
           test -s "$out"
-          read -r w h codec dur < <(ffprobe -v error \
-            -select_streams v:0 \
-            -show_entries stream=width,height,codec_name:format=duration \
-            -of csv=p=0:s=, "$out" | tr ',\n' '  ')
-          echo "geometry=${w}x${h} codec=${codec} duration=${dur}"
-          test "$w" = "1080" && test "$h" = "1920"
-          test "$codec" = "h264"
-          awk -v d="$dur" 'BEGIN { exit !(d > 1) }'
+
+          # One field per call: ffprobe emits csv fields in its own order, not
+          # the order they are asked for, so a combined query is unparseable.
+          probe() { ffprobe -v error -of default=noprint_wrappers=1:nokey=1 "$@" "$out"; }
+          width=$(probe   -select_streams v:0 -show_entries stream=width)
+          height=$(probe  -select_streams v:0 -show_entries stream=height)
+          vcodec=$(probe  -select_streams v:0 -show_entries stream=codec_name)
+          acodec=$(probe  -select_streams a:0 -show_entries stream=codec_name)
+          duration=$(probe -show_entries format=duration)
+
+          echo "geometry=${width}x${height} video=${vcodec} audio=${acodec} duration=${duration}"
+          test "$width"  = "1080"
+          test "$height" = "1920"
+          test "$vcodec" = "h264"
+          test "$acodec" = "aac"
+          awk -v d="$duration" 'BEGIN { exit !(d > 1) }'
 
   package:
     runs-on: ubuntu-latest

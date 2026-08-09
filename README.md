@@ -59,7 +59,7 @@ will do well.
 resumex demo
 ```
 
-Writes a real `1080x1920` MP4 to `demo_output/resumex-demo.mp4` in about ten
+Writes a real `1080x1920` MP4 to `demo_output/resumex-demo.mp4` in roughly ten
 seconds. It uses a bundled sample story, a locally drawn background and a silent
 audio track, so it needs no model download, no credentials and no network.
 
@@ -107,18 +107,23 @@ optional:
 ```
 Resumex doctor
 [ok] Python 3.12.4
-[ok] FFmpeg               7.1
-[ok] ffprobe              available
-[ok] Workspace            /home/you/videos
-[ok] Write access         workspace is writable
-[ok] Caption font         NotoSans-Bold.ttf
+[ok] Platform              Linux x86_64
+[ok] FFmpeg                7.1
+[ok] ffprobe               available
+[ok] Workspace             /path/to/your/workspace
+[ok] Config                /path/to/your/workspace/resumex.toml
+[ok] Write access          workspace is writable
+[ok] backgrounds/          0 item(s)
+[ok] stories/              1 item(s)
+[ok] output/               0 item(s)
+[ok] Caption font          NotoSans-Bold.ttf
 
 Optional
-[--] Speech (Kokoro)      not installed - pip install "resumex[tts]"
-[ok] Silent narration     available, so rendering still works
-[--] Ollama               disabled (optional)
-[--] Reddit source        disabled (optional)
-[--] YouTube upload       disabled (optional)
+[--] Speech (Kokoro)       not installed - pip install "resumex[tts]"
+[ok] Silent narration      available, so rendering still works
+[--] Ollama                disabled (optional)
+[--] Reddit source         disabled (optional)
+[--] YouTube upload        disabled (optional)
 
 [ok] Ready to render.  Try:  resumex demo
 ```
@@ -140,7 +145,7 @@ The body. Any number of paragraphs.
 Then:
 
 ```bash
-pip install "resumex[tts]"         # real speech, ~1 GB of model on first run
+pip install "resumex[tts]"         # real speech; Kokoro fetches its weights on first run
 resumex render stories/my-story.md
 ```
 

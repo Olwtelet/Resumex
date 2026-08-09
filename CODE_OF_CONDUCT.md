@@ -24,9 +24,8 @@ belonging to this project, and to anyone representing the project elsewhere.
 
 ## Enforcement
 
-Report a problem by opening an issue, or privately through a
-[security advisory](https://github.com/Olwtelet/Resumex/security/advisories/new)
-if it involves personal information.
+Report a problem by opening an issue. If it involves personal information, use
+the private channel described in [SECURITY.md](SECURITY.md) instead.
 
 Reports are handled by the maintainer, who will keep the reporter's identity
 private. The response will be proportionate: usually a request to stop,
