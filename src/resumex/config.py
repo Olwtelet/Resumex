@@ -19,6 +19,7 @@ CONFIG_FILENAME = "resumex.toml"
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 BUNDLED_FONT = ASSETS_DIR / "fonts" / "NotoSans-Bold.ttf"
 BUNDLED_DEMO_STORY = ASSETS_DIR / "stories" / "demo.md"
+BUNDLED_SAMPLE_STORY = ASSETS_DIR / "stories" / "sample.md"
 
 
 @dataclass(frozen=True, slots=True)
@@ -218,12 +219,13 @@ class Config:
         resolved = _resolve_config_file(config_file, workspace)
         data = _read_toml(resolved) if resolved else {}
 
+        # Always consume the key, even when an override wins, so the strict
+        # unknown-section check below does not trip over it.
+        raw_ws = _pop_scalar(data, "workspace")
         ws = workspace or _env_path("RESUMEX_WORKSPACE")
-        if ws is None:
-            raw_ws = _pop_scalar(data, "workspace")
-            if raw_ws is not None:
-                base = resolved.parent if resolved else Path.cwd()
-                ws = (base / str(raw_ws)).resolve()
+        if ws is None and raw_ws is not None:
+            base = resolved.parent if resolved else Path.cwd()
+            ws = (base / str(raw_ws)).resolve()
         if ws is None:
             ws = Path.cwd()
 
@@ -241,6 +243,77 @@ class Config:
         )
         _reject_unknown_sections(data)
         return _apply_env(config)
+
+
+EXAMPLE_CONFIG = '''\
+# Resumex configuration. Every key below is optional - delete anything you do
+# not want to change and Resumex uses the built-in default.
+#
+# Written by `resumex init`. The canonical copy lives in resumex.example.toml.
+
+# Where Resumex reads and writes. Relative paths resolve against this file.
+workspace = "."
+
+[render]
+width = 1080
+height = 1920
+fps = 30
+crf = 20                     # 0 = lossless, 51 = worst. 18-24 is a sane range.
+preset = "medium"            # x264 speed/size tradeoff: ultrafast .. veryslow
+audio_bitrate = "192k"
+font_size = 84
+caption_max_words = 4        # words shown on screen at once
+caption_max_duration = 2.2   # seconds a caption group may span
+caption_position = 0.62      # 0.0 = top of frame, 1.0 = bottom
+background_dim = 0.35        # 0.0 = untouched, 1.0 = black
+# font_path = "/path/to/YourFont.ttf"   # defaults to the bundled Noto Sans Bold
+
+[narration]
+provider = "auto"            # "auto" | "kokoro" | "silent"
+voice = "af_heart"           # Kokoro voice id
+lang_code = "a"              # Kokoro language: a = American English
+speed = 1.0
+words_per_minute = 165       # pacing used by the silent narrator
+
+[scoring]
+provider = "none"            # "none" | "heuristic" | "ollama"
+min_overall = 0.0            # skip stories scoring below this (0-10)
+
+[metadata]
+provider = "fallback"        # "fallback" = deterministic, no model | "ollama"
+max_title_length = 100
+
+# Optional. Nothing in the default pipeline needs a language model.
+[ollama]
+enabled = false
+url = "http://localhost:11434"
+model = "llama3.2"
+timeout = 120.0
+
+# Optional. Rendering works exactly the same with this switched off.
+[youtube]
+enabled = false
+privacy = "private"          # "private" | "unlisted" | "public"
+category_id = "22"
+made_for_kids = false
+# client_secrets = "./client_secret.json"
+# token = "./.resumex/youtube-token.json"
+
+# Optional. Reads Reddit's public JSON listings; no browser, no credentials.
+[reddit]
+enabled = false
+subreddits = []
+listing = "top"              # "hot" | "new" | "top" | "rising"
+time_filter = "month"
+limit = 25
+min_chars = 400
+max_chars = 4000
+
+# Override these if ffmpeg is not on PATH.
+[tools]
+ffmpeg = "ffmpeg"
+ffprobe = "ffprobe"
+'''
 
 
 def _resolve_config_file(config_file: Path | None, workspace: Path | None) -> Path | None:

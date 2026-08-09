@@ -72,6 +72,9 @@ def error(text: str) -> None:
     write(f"{style(FAIL, 'red')} {text}", stream=sys.stderr)
 
 
+LABEL_WIDTH = 20
+
+
 def status(state: str, label: str, note: str = "") -> None:
     """One line of `resumex doctor` output."""
     marks = {
@@ -81,10 +84,10 @@ def status(state: str, label: str, note: str = "") -> None:
         "skip": (SKIP, "dim"),
     }
     mark, colour = marks[state]
-    line = f"{style(mark, colour)} {label}"
+    line = f"{style(mark, colour)} {label.ljust(LABEL_WIDTH) if note else label}"
     if note:
         line += f"  {style(note, 'dim')}"
-    write(line)
+    write(line.rstrip())
 
 
 def table(rows: list[tuple[str, ...]], headers: tuple[str, ...]) -> None:
