@@ -1,25 +1,37 @@
-*.pyc
-reddit_data
-reddit_post_images
-narration_test
-narrations
-final_vids
-sludge_videos
-__pycache__
-temp
-data/post_usage_history.txt
-data/youtube_post_history.txt
-src/youtube/token.json
-src/youtube/client_secret.json
-.claude
-tests/debug_page.html
-selenium_profile/
-src/scraper/html_examples/
-src/metadata/benchmark_results.json
-src/metadata/benchmark_guide.md
-src/metadata/fine_tuner_results.json
-src/metadata/post_scoring_results.json
-tests/test_static_reddit_post.png
-tests/test_narration.wav
-tests/test_final_vid.mp4
-tests/test_final_vid_metadata.json
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Resumex workspace (created by `resumex init`)
+.resumex/
+backgrounds/
+output/
+demo_output/
+stories/
+logs/
+
+# Local configuration and credentials — never commit these
+resumex.toml
+client_secret*.json
+token.json
+*.pem
+.env
+
+# Model / provider caches
+.cache/
+*.onnx
+*.pth
+*.safetensors
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

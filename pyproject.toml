@@ -1,35 +1,65 @@
 [project]
-name = "shortform-sludge-maker"
+name = "resumex"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "Matt Main_PC",email = "matmigg0804@gmail.com"}
-]
+description = "Local-first pipeline that turns text stories into polished short-form videos."
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
-dependencies = [
-    "pillow (>=11.3.0,<12.0.0)",
-    "requests (>=2.32.4,<3.0.0)",
-    "selenium (>=4.34.2,<5.0.0)",
-    "webdriver-manager (>=4.0.2,<5.0.0)",
-    "huggingface_hub",
-    "loguru",
-    "misaki[en]>=0.9.4",
-    "numpy",
-    "torch>=2.0.0",
-    "transformers>=4.36.0",
-    "soundfile (>=0.13.1,<0.14.0)",
-    "moviepy (==1.0.3)",
-    "opencv-python (>=4.12.0.88,<5.0.0.0)",
-    "faster-whisper (>=1.1.1,<2.0.0)",
-    "google-auth (>=2.15,<2.42)",
-    "google-api-python-client (>=2.187.0,<3.0.0)",
-    "google-auth-oauthlib (==1.2.3)",
-    "undetected-chromedriver (>=3.5.0)",
-    "yt-dlp (>=2025.12.8,<2026.0.0)"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Olwtelet" }]
+keywords = ["video", "shorts", "tts", "captions", "ffmpeg", "local-first"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
 ]
+dependencies = ["pillow>=10.0"]
 
+[project.optional-dependencies]
+tts = ["kokoro>=0.9.4", "soundfile>=0.12", "numpy>=1.24"]
+youtube = [
+    "google-api-python-client>=2.100",
+    "google-auth>=2.23",
+    "google-auth-oauthlib>=1.2",
+]
+all = ["resumex[tts,youtube]"]
+dev = ["pytest>=8.0", "ruff>=0.6", "build>=1.2"]
+
+[project.scripts]
+resumex = "resumex.cli:main"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/resumex"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/resumex", "tests", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RUF"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+markers = [
+    "integration: tests that shell out to ffmpeg or touch optional providers",
+]
