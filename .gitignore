@@ -9,13 +9,14 @@ venv/
 .pytest_cache/
 .ruff_cache/
 
-# Resumex workspace (created by `resumex init`)
+# Resumex workspace (created by `resumex init`).
+# Anchored to the repo root so they never shadow packaged assets.
 .resumex/
-backgrounds/
-output/
-demo_output/
-stories/
-logs/
+/backgrounds/
+/output/
+/demo_output/
+/stories/
+/logs/
 
 # Local configuration and credentials — never commit these
 resumex.toml
